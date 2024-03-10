@@ -1,5 +1,7 @@
 import java.util.Arrays;
-
+/**
+ * The class that represents the solution
+ */
 public class Solution {
     private Problem problem;
     private final long depotToClient = (long) (Math.random() * 60);
@@ -16,7 +18,10 @@ public class Solution {
     public Problem getProblem() {
         return problem;
     }
-
+    /**
+     *Sorts the array of the clients by the beginning time , preparing it for running the greedy algorithm.
+     *
+     */
     public void sort() {
         Client[] clients = problem.getClients();
         for (int i = 0; i < clients.length - 1; i++) {
@@ -29,7 +34,10 @@ public class Solution {
             }
         }
     }
-
+    /**
+     * Computes the solution of the problem and puts it in a string.
+     *
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

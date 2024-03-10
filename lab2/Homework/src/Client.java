@@ -1,6 +1,8 @@
 import java.time.LocalTime;
 import java.util.Objects;
-
+/**
+ * This is the class that represents a client.
+ */
 public class Client {
     private String name;
     private LocalTime minTime;

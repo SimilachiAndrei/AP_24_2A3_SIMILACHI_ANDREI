@@ -1,3 +1,6 @@
+/**
+ * A class the extends the vehicle class and represents a truck.
+ */
 public class Truck extends Vehicle {
     private int capacity;
 

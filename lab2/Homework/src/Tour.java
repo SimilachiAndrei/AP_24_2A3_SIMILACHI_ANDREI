@@ -1,4 +1,6 @@
-
+/**
+ * The class that represents a tour of a vehicle.
+ */
 public class Tour {
     private Vehicle vehicle;
     private Client[] clients;
@@ -25,6 +27,10 @@ public class Tour {
     public void setClients(Client ... clients) {
         this.clients = clients;
     }
+    /**
+     *Sorts the array of the clients by the beginning time , preparing it for running the greedy algorithm.
+     *
+     */
     public void sort()
     {
         for (int i = 0; i < clients.length - 1; i++) {
@@ -37,7 +43,10 @@ public class Tour {
             }
         }
     }
-
+    /**
+     * Computes the tour and puts it in a string.
+     *
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

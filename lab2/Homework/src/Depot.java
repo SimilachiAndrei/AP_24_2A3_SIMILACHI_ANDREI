@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.Objects;
-
+/**
+ * This is the class that represents a depot.
+ */
 public class Depot {
     private String name;
     private Vehicle[] vehicles;
@@ -25,7 +27,10 @@ public class Depot {
     public Vehicle[] getVehicles() {
         return vehicles;
     }
-
+    /**
+     * Updates the vehicles array and sets the depot for them.
+     * @param vehicles a vehicles array.
+     */
     public void setVehicles(Vehicle... vehicles) {
         if (this.vehicles == null)
             this.vehicles = new Vehicle[0];
@@ -34,7 +39,12 @@ public class Depot {
                 vehicle.setDepot(this);
         }
     }
-
+    /**
+     * Adds a vehicle to the array and checks if it is already in the depot.
+     *
+     * @param vehicle the vehicle to be added.
+     * @return true or false ( added or not ).
+     */
     public boolean addVehicle(Vehicle vehicle) {
         // Check if depot is already in the array
         for (Vehicle vehicleIterator : vehicles) {
@@ -61,7 +71,11 @@ public class Depot {
 
         return true;
     }
-
+    /**
+     * Returns the properties of the depot.
+     *
+     * @return the string resulte from adding all the information from the deport.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

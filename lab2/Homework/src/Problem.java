@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.ArrayList;
-
+/**
+ * The class the class the represents an instance of the problem.
+ */
 public class Problem {
     private Depot[] depots;
     private Client[] clients;
@@ -37,7 +39,11 @@ public class Problem {
             addClient(client);
         }
     }
-
+    /**
+     * Finds out all the vehicles that are found in the depots.
+     *
+     * @return all the vehicles found in the depots.
+     */
     public Vehicle[] getVehicles() {
         ArrayList<Vehicle> allVehicles = new ArrayList<>();
         for (Depot depot : depots) {
@@ -55,7 +61,11 @@ public class Problem {
         }
         return allVehicles.toArray(new Vehicle[0]);
     }
-
+    /**
+     * Adds a depot to the depots array if it is not already part of it.
+     *
+     * @param depot the depot to be added.
+     */
     public void addDepot(Depot depot) {
         if (depots == null)
             depots = new Depot[0];
@@ -82,7 +92,11 @@ public class Problem {
         depots = newDepots;
 
     }
-
+    /**
+     * Adds a client to the clients array if it is not already part of it.
+     *
+     * @param client the client to be added.
+     */
     public void addClient(Client client) {
         if (clients == null)
             this.clients = new Client[0];

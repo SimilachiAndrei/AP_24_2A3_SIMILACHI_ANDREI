@@ -1,3 +1,6 @@
+/**
+ * A class the extends the vehicle class and represents a drone.
+ */
 public class Drone extends Vehicle {
     private long duration;
 

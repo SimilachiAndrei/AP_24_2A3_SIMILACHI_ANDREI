@@ -1,3 +1,6 @@
+/**
+ * The class the represents a vehicle.
+ */
 public abstract class Vehicle {
     protected String name;
     protected Depot depot;
