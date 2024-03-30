@@ -1,0 +1,16 @@
+org/Compulsory/Main.class
+org/Compulsory/Person.class
+org/Homework/InvalidCommandException.class
+org/Compulsory/RepositoryService.class
+org/Homework/Export.class
+org/Homework/RepositoryService.class
+org/Homework/Document.class
+org/Homework/Person.class
+org/Homework/Repository.class
+org/Compulsory/Document.class
+org/Homework/Main.class
+org/Homework/View.class
+org/Homework/Report.class
+org/Homework/InvalidDataException.class
+org/Homework/Command.class
+org/Compulsory/Repository.class
