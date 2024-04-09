@@ -17,6 +17,16 @@ public class DrawingPanel extends BorderPane {
     private Color currentPlayerColor;
     private boolean gameOver;
 
+    public void startNewGame() {
+        selectedPoints.clear();
+        currentPlayerColor = Color.RED;
+        gameOver = false;
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawGrid(10, 10); // Adjust the grid size as needed
+    }
+
+
     public DrawingPanel(double width, double height) {
         canvas = new Canvas(width, height);
         setCenter(canvas);
@@ -92,6 +102,7 @@ public class DrawingPanel extends BorderPane {
     }
     private void handleMouseClick(MouseEvent event) {
         if (gameOver) {
+            startNewGame();
             return;
         }
 
@@ -103,6 +114,7 @@ public class DrawingPanel extends BorderPane {
                 if (!hasAvailableMoves()) {
                     gameOver = true;
                     System.out.println("Player " + (currentPlayerColor == Color.RED ? "Red" : "Blue") + " wins!");
+                    // Add the code to save the game here
                 } else {
                     currentPlayerColor = (currentPlayerColor == Color.RED) ? Color.BLUE : Color.RED;
                 }
@@ -139,5 +151,9 @@ public class DrawingPanel extends BorderPane {
             }
         }
         return false;
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
     }
 }
