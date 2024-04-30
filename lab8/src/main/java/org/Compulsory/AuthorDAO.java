@@ -9,6 +9,7 @@ public class AuthorDAO {
                 "insert into authors (name) values (?)")) {
             pstmt.setString(1, name);
             pstmt.executeUpdate();
+            con.commit();
         }
     }
     public Integer findByName(String name) throws SQLException {
