@@ -1,14 +1,18 @@
 BEGIN TRANSACTION;
 
+DROP TABLE IF EXISTS pacient_treatment;
+DROP TABLE IF EXISTS treatments;
+DROP TABLE IF EXISTS pacients;
+DROP TABLE IF EXISTS history;
+DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS drugs;
+
 
 CREATE TABLE drugs (
    id SERIAL PRIMARY KEY,
    name TEXT NOT NULL,
    quantity INTEGER
 );
-
-DROP TABLE IF EXISTS schedule;
 
 CREATE TABLE schedule (
   id SERIAL PRIMARY KEY,
@@ -18,7 +22,6 @@ CREATE TABLE schedule (
   FOREIGN KEY (drug_id) REFERENCES drugs(id)
 );
 
-DROP TABLE IF EXISTS history;
 
 CREATE TABLE history (
   id SERIAL PRIMARY KEY,
@@ -29,7 +32,6 @@ CREATE TABLE history (
   FOREIGN KEY (drug_id) REFERENCES drugs(id)
 );
 
-DROP TABLE IF EXISTS pacients;
 
 CREATE TABLE pacients (
   id SERIAL PRIMARY KEY,
@@ -37,17 +39,14 @@ CREATE TABLE pacients (
   firstname TEXT
 );
 
-DROP TABLE IF EXISTS treatments;
 
 CREATE TABLE treatments (
   id SERIAL PRIMARY KEY,
   illness TEXT,
   drug_id INTEGER,
-  dailyquantity DECIMAL(5, 2),
+  dailyquantity INTEGER,
   FOREIGN KEY (drug_id) REFERENCES drugs(id)
 );
-
-DROP TABLE IF EXISTS pacient_treatment;
 
 CREATE TABLE pacient_treatment (
   id SERIAL PRIMARY KEY,
@@ -83,9 +82,9 @@ INSERT INTO pacients (surname, firstname) VALUES ('Smith', 'Jane');
 INSERT INTO pacients (surname, firstname) VALUES ('Brown', 'Charlie');
 
 -- Insert data into treatments table
-INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Headache', 1, 2.5);
-INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Inflammation', 2, 3.0);
-INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Fever', 3, 1.5);
+INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Headache', 1, 2);
+INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Inflammation', 2, 3);
+INSERT INTO treatments (illness, drug_id, dailyquantity) VALUES ('Fever', 3, 1);
 
 -- Insert data into pacient_treatment table
 INSERT INTO pacient_treatment (pacient_id, treatment_id) VALUES (1, 1);

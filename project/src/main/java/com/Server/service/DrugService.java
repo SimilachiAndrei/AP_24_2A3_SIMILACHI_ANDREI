@@ -1,38 +1,23 @@
 package com.Server.service;
 
 import com.Server.model.Drug;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.Server.repository.DrugRepository;
 import org.springframework.stereotype.Service;
 
-import com.Server.repository.DrugRepository;
-
-import java.util.List;
-
 @Service
-public class DrugService {
+public class DrugService extends AbstractService<Drug, Integer> {
 
-    @Autowired
-    private DrugRepository drugRepository;
-
-    public void addDrug(String name, int quantity) {
-        drugRepository.addDrug(name, quantity);
+    public DrugService(DrugRepository repository) {
+        super(repository);
     }
 
-    public Drug getDrug(String name)
-    {
-        return drugRepository.getDrug(name);
+    @Override
+    public void add(Drug entity) {
+        repository.add(entity);
     }
 
-    public List<Drug> getDrugs() {
-        return drugRepository.getDrugs();
+    @Override
+    public boolean update(Integer id, Drug entity) {
+        return repository.update(id, entity);
     }
-
-    public boolean deleteDrug(Integer id) {
-        return drugRepository.deleteDrug(id);
-    }
-
-    public boolean updateDrugQuantity(Integer id, Integer quantity) {
-        return drugRepository.updateDrugQuantity(id,quantity);
-    }
-    // Add other methods for business logic
 }
