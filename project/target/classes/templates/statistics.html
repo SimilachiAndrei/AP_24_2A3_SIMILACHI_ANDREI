@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Drug Statistics</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="bar">
+            <a href="http://localhost:3000/schedule" class="Button">Schedule</a>
+            <a href="http://localhost:3000/index" class="Button">Stock</a>
+        </div>
+
+        <h2>Drug Stock Levels</h2>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="aspirin-bar">
+                <div class="progress" style="width: 75%;">Aspirin: 75%</div>
+            </div>
+            <div class="progress-bar" id="ibuprofen-bar">
+                <div class="progress" style="width: 50%;">Ibuprofen: 50%</div>
+            </div>
+            <div class="progress-bar" id="paracetamol-bar">
+                <div class="progress" style="width: 25%;">Paracetamol: 25%</div>
+            </div>
+        </div>
+
+        <h2>Stock Depletion Predictions</h2>
+        <div class="predictions">
+            <p>Aspirin will run out in approximately <span >30 days</span>.</p>
+            <p>Ibuprofen will run out in approximately <span >20 days</span>.</p>
+            <p>Paracetamol will run out in approximately <span >10 days</span>.</p>
+        </div>
+    </div>
+
+</body>
+</html>
