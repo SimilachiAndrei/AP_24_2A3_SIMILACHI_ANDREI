@@ -20,8 +20,8 @@ public class DrugRepository extends AbstractRepository<Drug, Integer> {
 
     @Override
     public void add(Drug entity) {
-        String sql = "INSERT INTO drugs (name, quantity) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, entity.getName(), entity.getQuantity());
+        String sql = "INSERT INTO drugs (name, quantity,fullstock) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, entity.getName(), entity.getQuantity(),entity.getFullstock());
     }
 
     public List<Drug> getDrugsByName(String name) {

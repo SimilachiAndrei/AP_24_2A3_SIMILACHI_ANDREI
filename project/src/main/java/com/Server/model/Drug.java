@@ -14,9 +14,11 @@ public class Drug {
     private int id;
     private String name;
     private int quantity;
-    public Drug(String name , int quantity)
+    private int fullstock;
+    public Drug(String name , int quantity, int fullstock)
     {
         this.name=name;
         this.quantity=quantity;
+        this.fullstock=fullstock;
     }
 }
