@@ -6,12 +6,13 @@ DROP TABLE IF EXISTS pacients;
 DROP TABLE IF EXISTS history;
 DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS drugs;
-
+DROP FUNCTION IF EXISTS get_drug_statistics_and_prediction;
 
 CREATE TABLE drugs (
    id SERIAL PRIMARY KEY,
    name TEXT NOT NULL,
-   quantity INTEGER
+   quantity INTEGER,
+   fullstock INTEGER
 );
 
 CREATE TABLE schedule (
@@ -22,7 +23,6 @@ CREATE TABLE schedule (
   FOREIGN KEY (drug_id) REFERENCES drugs(id)
 );
 
-
 CREATE TABLE history (
   id SERIAL PRIMARY KEY,
   drug_id INTEGER,
@@ -32,13 +32,11 @@ CREATE TABLE history (
   FOREIGN KEY (drug_id) REFERENCES drugs(id)
 );
 
-
 CREATE TABLE pacients (
   id SERIAL PRIMARY KEY,
   surname TEXT,
   firstname TEXT
 );
-
 
 CREATE TABLE treatments (
   id SERIAL PRIMARY KEY,
@@ -56,32 +54,48 @@ CREATE TABLE pacient_treatment (
   FOREIGN KEY (treatment_id) REFERENCES treatments(id)
 );
 
-CREATE OR REPLACE PROCEDURE calculate_moving_average()
+-- Function to get drug statistics and predictions for all drugs
+CREATE OR REPLACE FUNCTION get_drug_statistics_and_prediction()
+RETURNS TABLE (
+    drug_name TEXT,
+    total_quantity INTEGER,
+    average_daily_consumption NUMERIC,
+    days_until_depletion NUMERIC,
+    percentage NUMERIC
+)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    -- Calculate moving average for drugs
-    CREATE TEMP TABLE moving_avg_results AS
-    WITH historical_data AS (
+    RETURN QUERY
+    WITH consumption AS (
         SELECT
-            drug_id,
-            data,
-            SUM(quantity) OVER (PARTITION BY drug_id ORDER BY data ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) / 7 AS moving_average
-        FROM schedule
+            h.drug_id,
+            d.name AS drug_name,
+            SUM(h.quantity) AS total_consumed,
+            AVG(h.quantity) AS avg_daily_consumption
+        FROM history h
+        JOIN drugs d ON h.drug_id = d.id
+        GROUP BY h.drug_id, d.name
+    ), stock AS (
+        SELECT
+            id AS drug_id,
+            quantity AS total_quantity,
+            fullstock
+        FROM drugs
     )
     SELECT
-        drug_id,
-        data,
-        moving_average
-    FROM
-        historical_data;
-
-    -- Return the calculated moving averages
-    SELECT * FROM moving_avg_results;
-
+        c.drug_name,
+        s.total_quantity,
+        c.avg_daily_consumption,
+        CASE
+            WHEN c.avg_daily_consumption > 0 THEN s.total_quantity / c.avg_daily_consumption
+            ELSE NULL
+        END AS days_until_depletion,
+        (s.total_quantity::NUMERIC / s.fullstock) * 100 AS percentage
+    FROM consumption c
+    JOIN stock s ON c.drug_id = s.drug_id;
 END;
 $$;
-
 
 COMMIT;
 
@@ -89,9 +103,9 @@ COMMIT;
 BEGIN TRANSACTION;
 
 -- Insert data into drugs table
-INSERT INTO drugs (name, quantity) VALUES ('Aspirin', 100);
-INSERT INTO drugs (name, quantity) VALUES ('Ibuprofen', 200);
-INSERT INTO drugs (name, quantity) VALUES ('Paracetamol', 150);
+INSERT INTO drugs (name, quantity, fullstock) VALUES ('Aspirin', 100, 125);
+INSERT INTO drugs (name, quantity, fullstock) VALUES ('Ibuprofen', 200, 400);
+INSERT INTO drugs (name, quantity, fullstock) VALUES ('Paracetamol', 150, 600);
 
 -- Insert data into schedule table
 INSERT INTO schedule (drug_id, data, quantity) VALUES (1, '2024-05-01', 10);
@@ -119,3 +133,5 @@ INSERT INTO pacient_treatment (pacient_id, treatment_id) VALUES (2, 2);
 INSERT INTO pacient_treatment (pacient_id, treatment_id) VALUES (3, 3);
 
 COMMIT;
+
+-- Call the function to get statistics for all drugs
