@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS history;
 DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS drugs;
 DROP FUNCTION IF EXISTS get_drug_statistics_and_prediction;
+DROP FUNCTION IF EXISTS calculate_drug_statistics();
+
 
 CREATE TABLE drugs (
    id SERIAL PRIMARY KEY,
@@ -96,6 +98,41 @@ BEGIN
     JOIN stock s ON c.drug_id = s.drug_id;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION calculate_drug_statistics()
+RETURNS TABLE (
+    name TEXT,
+    quantity INTEGER,
+    fullstock INTEGER,
+    percentage NUMERIC,
+    max_capacity INTEGER,
+    free_space INTEGER
+) LANGUAGE plpgsql
+AS $$
+DECLARE
+    max_capacity INTEGER;
+    current_total_quantity INTEGER;
+    free_space INTEGER;
+BEGIN
+    -- Calculate the total maximum capacity and current total quantity
+    SELECT SUM(dr.fullstock), SUM(dr.quantity) INTO max_capacity, current_total_quantity FROM drugs dr;
+
+    -- Calculate free space
+    free_space := max_capacity - current_total_quantity;
+
+    -- Return the detailed statistics
+    RETURN QUERY
+    SELECT
+        dr.name,
+        dr.quantity,
+        dr.fullstock,
+        (dr.quantity::NUMERIC / max_capacity) * 100 AS percentage,
+        max_capacity,
+        free_space
+    FROM drugs dr;
+END;
+$$;
+
 
 COMMIT;
 
