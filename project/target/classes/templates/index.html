@@ -66,6 +66,9 @@
                 if (parseFloat(newQuantity) > fullStock) {
                     newQuantity = fullStock;
                 }
+                else if (parseFloat(newQuantity) < 0) {
+                    newQuantity = 0;
+                }
 
                 updateDrugQuantity(id, newQuantity)
                     .then(response => {

@@ -52,7 +52,10 @@
 
                     // Create prediction
                     const prediction = document.createElement('p');
-                    prediction.innerHTML = `${drug.drugName} will run out in approximately <span>${drug.daysUntilDepletion} days</span>.`;
+                    if(drug.daysUntilDepletion > 0)
+                        prediction.innerHTML = `${drug.drugName} will run out in approximately <span>${drug.daysUntilDepletion} days</span>.`;
+                    else
+                        prediction.innerHTML = `${drug.drugName} ran out.`;
                     predictionsContainer.appendChild(prediction);
                 });
             })
