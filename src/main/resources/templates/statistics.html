@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Drug Statistics</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="bar">
+        <a href="http://localhost:3000/schedule" class="Button">Schedule</a>
+        <a href="http://localhost:3000/" class="Button">Stock</a>
+    </div>
+
+    <h2>Drug Stock Levels</h2>
+    <div class="progress-bar-container" id="progressBars">
+        <!-- Progress bars will be populated dynamically -->
+    </div>
+
+    <h2>Stock Depletion Predictions</h2>
+    <div class="predictions" id="predictions">
+        <!-- Predictions will be populated dynamically -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const apiEndpoint = 'http://localhost:3000/api/statistics'; // Replace with your API endpoint
+
+        // Fetch data from the API
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                const progressBarContainer = document.getElementById('progressBars');
+                const predictionsContainer = document.getElementById('predictions');
+
+                progressBarContainer.innerHTML = ''; // Clear any existing progress bars
+                predictionsContainer.innerHTML = ''; // Clear any existing predictions
+
+                data.forEach(drug => {
+                    // Create progress bar
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    const progress = document.createElement('div');
+                    progress.className = 'progress';
+                    progress.style.width = `${drug.percentage}%`;
+                    progress.textContent = `${drug.drugName}: ${drug.percentage}%`;
+                    progressBar.appendChild(progress);
+                    progressBarContainer.appendChild(progressBar);
+
+                    // Create prediction
+                    const prediction = document.createElement('p');
+                    if(drug.daysUntilDepletion > 0)
+                        prediction.innerHTML = `${drug.drugName} will run out in approximately <span>${drug.daysUntilDepletion} days</span>.`;
+                    else
+                        prediction.innerHTML = `${drug.drugName} ran out.`;
+                    predictionsContainer.appendChild(prediction);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+</script>
+</body>
+</html>

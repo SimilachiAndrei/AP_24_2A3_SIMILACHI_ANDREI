@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Drug Schedule</title>
+    <link rel="stylesheet" href="styles/style.css">
+        
+</head>
+<body>
+
+    <div class="container">
+        <div class="bar">
+            <a href="http://localhost:3000/statistics" class="Button">Statistics</a>
+            <a href="http://localhost:3000/" class="Button">Stock</a>
+            <input type="text" class="searchBar" placeholder="Search...">
+        </div>
+
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Arriving Date</th>
+                </tr>
+            </thead>
+            <tbody class="drugTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const apiEndpoint = 'http://localhost:3000/api/schedule';
+
+            // Fetch data from the API
+            fetch(apiEndpoint)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('.drugTableBody');
+                    tableBody.innerHTML = ''; // Clear any existing rows
+                    data.forEach(drug => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${drug.id}</td>
+                            <td>${drug.drug_id}</td>
+                            <td>${drug.quantity}</td>
+                            <td>${drug.data}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+            .catch(error => console.error('Error fetching data:', error));
+
+            // Search functionality
+            document.querySelector('.searchBar').addEventListener('input', function(event) {
+                const searchQuery = event.target.value.toLowerCase();
+                const rows = document.querySelectorAll('.drugTableBody tr');
+                rows.forEach(row => {
+                    const idCell = row.querySelector('td:nth-child(1)');
+                    const nameCell = row.querySelector('td:nth-child(2)');
+                    const dateCell = row.querySelector('td:nth-child(4)');
+                    const match = idCell.textContent.toLowerCase().includes(searchQuery) ||
+                                  nameCell.textContent.toLowerCase().includes(searchQuery) ||
+                                  dateCell.textContent.toLowerCase().includes(searchQuery);
+                    row.style.display = match ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
