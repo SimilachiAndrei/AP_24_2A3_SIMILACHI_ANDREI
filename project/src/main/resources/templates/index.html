@@ -26,14 +26,13 @@
         </tr>
         </thead>
         <tbody class="drugTableBody">
-        <!-- Rows will be populated dynamically -->
         </tbody>
     </table>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const apiEndpoint = 'http://localhost:3000/api/drugs'; // Replace with your API endpoint
+        const apiEndpoint = 'http://localhost:3000/api/drugs';
 
         // Add event listener to Modify buttons
         document.querySelector('.drugTableBody').addEventListener('click', function(event) {
@@ -87,7 +86,6 @@
             }
         });
 
-        // Fetch data from the API
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {

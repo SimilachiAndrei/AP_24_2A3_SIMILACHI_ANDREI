@@ -14,22 +14,23 @@
         <a href="http://localhost:3000/" class="Button">Stock</a>
     </div>
 
+    <h2>Total Storage Capacity</h2>
+    <div class="progress-bar-container" id="totalSpaceContainer">
+    </div>
+
     <h2>Drug Stock Levels</h2>
     <div class="progress-bar-container" id="progressBars">
-        <!-- Progress bars will be populated dynamically -->
     </div>
 
     <h2>Stock Depletion Predictions</h2>
     <div class="predictions" id="predictions">
-        <!-- Predictions will be populated dynamically -->
     </div>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const apiEndpoint = 'http://localhost:3000/api/statistics'; // Replace with your API endpoint
+        const apiEndpoint = 'http://localhost:3000/api/statistics';
 
-        // Fetch data from the API
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
@@ -60,6 +61,34 @@
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
+
+        fetch('http://localhost:3000/api/drugstatistics')
+            .then(response => response.json())
+            .then(data => {
+                const totalSpaceContainer = document.getElementById('totalSpaceContainer');
+
+                let totalMaxCapacity = 0;
+                let totalFreeSpace = 0;
+
+                data.forEach(drug => {
+                    totalMaxCapacity += drug.maxCapacity;
+                    totalFreeSpace += drug.freeSpace;
+                });
+
+                // Calculate total space usage percentage
+                const totalSpaceUsedPercentage = ((totalMaxCapacity - totalFreeSpace) / totalMaxCapacity) * 100;
+
+                // Create total space progress bar
+                const totalSpaceProgressBar = document.createElement('div');
+                totalSpaceProgressBar.className = 'progress-bar';
+                const totalSpaceProgress = document.createElement('div');
+                totalSpaceProgress.className = 'progress';
+                totalSpaceProgress.style.width = `${totalSpaceUsedPercentage}%`;
+                totalSpaceProgress.textContent = `Total Space Used: ${totalSpaceUsedPercentage.toFixed(2)}%`;
+                totalSpaceProgressBar.appendChild(totalSpaceProgress);
+                totalSpaceContainer.appendChild(totalSpaceProgressBar);
+            })
+            .catch(error => console.error('Error fetching total storage data:', error));
     });
 </script>
 </body>
